@@ -1,0 +1,8 @@
+check process <%= node['rssbus']['service'] %> with pidfile <%= node['rssbus']['pid_file'] %>
+    alert <%= node["monit"]["alert_email"] %> but not on { pid, ppid }
+    start program = "/usr/bin/service <%= node['rssbus']['service'] %> start"
+    stop program = "/usr/bin/service <%= node['rssbus']['service'] %> stop"
+
+	if failed host localhost port <%= node['rssbus']['listening_ports'].first %> protocol http
+	     with timeout 20 seconds for 2 cycles
+	then exec "/usr/bin/service <%= node['rssbus']['service'] %> restart && /usr/bin/hipchat 'Restarting Jetty on <%= node.name %> as it is not responding'"

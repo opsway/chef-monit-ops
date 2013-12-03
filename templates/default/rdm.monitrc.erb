@@ -1,0 +1,4 @@
+check process 'mailreader_monitor' with pidfile /srv/redmine/tmp/pids/mailreader.pid
+    alert <%= node["monit"]["alert_email"] %> but not on { pid, ppid }
+    start program = "/etc/init.d/rdm start"
+    stop program = "/etc/init.d/rdm stop"

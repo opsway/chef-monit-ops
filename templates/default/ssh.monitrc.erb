@@ -1,0 +1,5 @@
+check process sshd with pidfile /var/run/sshd.pid
+  alert <%= node["monit"]["alert_email"] %> but not on { pid, ppid, connection} 
+  if failed port <%= node[:ssh][:port] %> protocol ssh then 
+  	exec "/etc/init.d/ssh restart && /usr/bin/hipchat 'Restarting SSHd on <%= node.name %>'"
+  if 5 restarts within 5 cycles then timeout

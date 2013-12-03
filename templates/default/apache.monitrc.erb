@@ -1,0 +1,8 @@
+check process <%= node['apache']['service'] %> with pidfile <%= node['apache']['pid_file'] %>
+    alert <%= node["monit"]["alert_email"] %> but not on { pid, ppid }
+    start program = "/usr/bin/service <%= node['apache']['service'] %> start"
+    stop program = "/usr/bin/service <%= node['apache']['service'] %> stop"
+
+	if failed host localhost port <%= node['apache']['listen_ports'].first %> protocol http  
+	     with timeout 20 seconds for 2 cycles 
+	then exec "/usr/bin/service <%= node['apache']['service'] %> restart && /usr/bin/hipchat 'Restarting Apache on <%= node.name %> as it is not responding'"

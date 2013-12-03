@@ -1,0 +1,5 @@
+check process alerts-server with pidfile /var/run/alerts-server.pid
+	start program = "/etc/init.d/alerts-server start"
+	stop program = "/etc/init.d/alerts-server stop"	
+	if 5 restarts within 5 cycles then alert
+	alert <%= node["monit"]["alert_email"] %> but not on { instance } 
